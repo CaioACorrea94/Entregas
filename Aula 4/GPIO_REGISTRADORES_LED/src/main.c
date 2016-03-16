@@ -32,6 +32,8 @@
  * ----------------------------------
  */
 #define PIN_LED_BLUE 19
+#define PIN_LED_GREEN 20
+#define PIN_LED_RED 20
 
 /** 
  * Definição dos ports
@@ -69,34 +71,62 @@ int main (void)
 	// 1: Enables the corresponding peripheral clock.
 	// ID_PIOA = 11 - TAB 11-1
 	PMC->PMC_PCER0 |= ID_PIOA;
+	PMC->PMC_PCER0 |= ID_PIOC;
 
 	 //31.6.1 PIO Enable Register
 	// 1: Enables the PIO to control the corresponding pin (disables peripheral control of the pin).	
 	PIOA->PIO_PER |= (1 << PIN_LED_BLUE );
+	PIOA->PIO_PER |= (1 << PIN_LED_GREEN );
+	PIOC->PIO_PER |= (1 << PIN_LED_RED );
 
 	// 31.6.46 PIO Write Protection Mode Register
 	// 0: Disables the write protection if WPKEY corresponds to 0x50494F (PIO in ASCII).
 	PIOA->PIO_WPMR = 0;
+	PIOC->PIO_WPMR = 0;
 	
 	// 31.6.4 PIO Output Enable Register
 	// 1: Enables the output on the I/O line.
 	PIOA->PIO_OER |=  (1 << PIN_LED_BLUE );
+	PIOA->PIO_OER |=  (1 << PIN_LED_GREEN );
+	PIOC->PIO_OER |=  (1 << PIN_LED_RED );
 
 	// 31.6.10 PIO Set Output Data Register
 	// 1: Sets the data to be driven on the I/O line.
+	
+	//Apagar os LED's
 	PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
+	PIOA->PIO_SODR = (1 << PIN_LED_GREEN );
+	PIOC->PIO_CODR = (1 << PIN_LED_RED );
+	
+	//Acender os LED's
+	PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
+	PIOA->PIO_CODR = (1 << PIN_LED_GREEN );
+	PIOC->PIO_SODR = (1 << PIN_LED_RED );
 
 	/**
 	*	Loop infinito
 	*/
-		while(1){
+		while(0){
 
             /*
              * Utilize a função delay_ms para fazer o led piscar na frequência
              * escolhida por você.
              */
             //delay_ms();
-		
+			
+			delay_ms(100);
+			
+			//Apaga o Led azul por 1 seg
+			PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
+			PIOA->PIO_CODR = (1 << PIN_LED_GREEN );
+			
+			delay_ms(100);
+			
+			//Acende o Led Azul por 1 seg
+			PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
+			PIOA->PIO_SODR = (1 << PIN_LED_GREEN );
+			
+	
 	}
 }
 
