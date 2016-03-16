@@ -31,6 +31,9 @@
  * | PIOA_19 | PIOA_18 | ... |PIOA_0|
  * ----------------------------------
  */
+
+#define TEMPO 100
+
 #define PIN_LED_BLUE 19
 #define PIN_LED_GREEN 20
 #define PIN_LED_RED 20
@@ -40,6 +43,8 @@
  * Ports referentes a cada pino
  */
 #define PORT_LED_BLUE PIOA
+#define PORT_LED_GREEN PIOA
+#define PORT_LED_RED PIOC
 
 
 
@@ -93,6 +98,13 @@ int main (void)
 	// 31.6.10 PIO Set Output Data Register
 	// 1: Sets the data to be driven on the I/O line.
 	
+	
+	/* Biblioteca dos LED's
+	
+	//Manual do SAM4S-EK2 sessão 4.3.15 
+	*Para acender os LED's verde(PA19) e azul(PA20), é necessário um baixo nivel.
+	*Para acender o LED vermelho(PC20), é necessário um alto nível
+	
 	//Apagar os LED's
 	PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
 	PIOA->PIO_SODR = (1 << PIN_LED_GREEN );
@@ -102,11 +114,14 @@ int main (void)
 	PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
 	PIOA->PIO_CODR = (1 << PIN_LED_GREEN );
 	PIOC->PIO_SODR = (1 << PIN_LED_RED );
+	
+	
+	*/
 
 	/**
 	*	Loop infinito
 	*/
-		while(0){
+		while(1){
 
             /*
              * Utilize a função delay_ms para fazer o led piscar na frequência
@@ -114,18 +129,36 @@ int main (void)
              */
             //delay_ms();
 			
-			delay_ms(100);
+			//LED's dançando
 			
-			//Apaga o Led azul por 1 seg
+			for(int i = 0; i<4;i++){
+			
+			PIOC->PIO_SODR = (1 << PIN_LED_RED );
+			PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
+			PIOA->PIO_SODR = (1 << PIN_LED_GREEN );
+			delay_ms(TEMPO);
+			
+			PIOC->PIO_CODR = (1 << PIN_LED_RED );
+			PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
+			delay_ms(TEMPO);
+			
 			PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
 			PIOA->PIO_CODR = (1 << PIN_LED_GREEN );
+			delay_ms(TEMPO);
 			
-			delay_ms(100);
+			}
 			
-			//Acende o Led Azul por 1 seg
-			PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
-			PIOA->PIO_SODR = (1 << PIN_LED_GREEN );
-			
+			for(int i = 0; i<2;i++){
+				PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
+				PIOA->PIO_CODR = (1 << PIN_LED_GREEN );
+				PIOC->PIO_SODR = (1 << PIN_LED_RED );
+				delay_ms(TEMPO*2);
+				
+				PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
+				PIOA->PIO_SODR = (1 << PIN_LED_GREEN );
+				PIOC->PIO_CODR = (1 << PIN_LED_RED );
+				delay_ms(TEMPO*2);
+			}
 	
 	}
 }
