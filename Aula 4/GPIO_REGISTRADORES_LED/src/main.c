@@ -38,6 +38,8 @@
 #define PIN_LED_GREEN 20
 #define PIN_LED_RED 20
 
+#define PIN_PUSHBUTTON_1 3
+
 /** 
  * Definição dos ports
  * Ports referentes a cada pino
@@ -45,6 +47,8 @@
 #define PORT_LED_BLUE PIOA
 #define PORT_LED_GREEN PIOA
 #define PORT_LED_RED PIOC
+#define PORT_PUSHBUTTON_1 PIOB
+
 
 
 
@@ -75,25 +79,38 @@ int main (void)
 	// 29.17.4 PMC Peripheral Clock Enable Register 0
 	// 1: Enables the corresponding peripheral clock.
 	// ID_PIOA = 11 - TAB 11-1
-	PMC->PMC_PCER0 |= ID_PIOA;
-	PMC->PMC_PCER0 |= ID_PIOC;
-
-	 //31.6.1 PIO Enable Register
-	// 1: Enables the PIO to control the corresponding pin (disables peripheral control of the pin).	
-	PIOA->PIO_PER |= (1 << PIN_LED_BLUE );
-	PIOA->PIO_PER |= (1 << PIN_LED_GREEN );
-	PIOC->PIO_PER |= (1 << PIN_LED_RED );
+	PMC->PMC_PCER0 |=  (1 << ID_PIOA) | (1 << ID_PIOB) | (1 << ID_PIOC); 
 
 	// 31.6.46 PIO Write Protection Mode Register
 	// 0: Disables the write protection if WPKEY corresponds to 0x50494F (PIO in ASCII).
 	PIOA->PIO_WPMR = 0;
 	PIOC->PIO_WPMR = 0;
+	PIOB->PIO_WPMR = 0;
+
+	 //31.6.1 PIO Enable Register
+	// 1: Enables the PIO to control the corresponding pin (disables peripheral control of the pin).	
+	PIOA->PIO_PER = (1 << PIN_LED_BLUE );
+	PIOA->PIO_PER = (1 << PIN_LED_GREEN );
+	PIOC->PIO_PER = (1 << PIN_LED_RED );
+	PIOB->PIO_PER = (1 << PIN_PUSHBUTTON_1);
+
 	
+	// 31.5.6: PIO disable buffer
+	PIOB->PIO_ODR = (1 << PIN_PUSHBUTTON_1);
+
+	
+	//31.5.6: Pull up enable
+	PIOB->PIO_PUER = (1 << PIN_PUSHBUTTON_1);	
+	
+	//PIOB->PIO_IFDR = (1 << PIN_PUSHBUTTON_1);
+	PIOB->PIO_IFSCER = (1 << PIN_PUSHBUTTON_1);
+	
+
 	// 31.6.4 PIO Output Enable Register
 	// 1: Enables the output on the I/O line.
-	PIOA->PIO_OER |=  (1 << PIN_LED_BLUE );
-	PIOA->PIO_OER |=  (1 << PIN_LED_GREEN );
-	PIOC->PIO_OER |=  (1 << PIN_LED_RED );
+	PIOA->PIO_OER =  (1 << PIN_LED_BLUE );
+	PIOA->PIO_OER =  (1 << PIN_LED_GREEN );
+	PIOC->PIO_OER =  (1 << PIN_LED_RED );
 
 	// 31.6.10 PIO Set Output Data Register
 	// 1: Sets the data to be driven on the I/O line.
@@ -122,6 +139,20 @@ int main (void)
 	*	Loop infinito
 	*/
 		while(1){
+			
+			/* WHile para verificar se o botão USRPB1 foi pressionado */
+			
+			if ( ((PIOB->PIO_PDSR >> PIN_PUSHBUTTON_1) & 1)  == 0){
+				PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
+				delay_ms(200);
+			}
+			else {
+				PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
+				delay_ms(200);
+				
+			} 
+						
+			
 
             /*
              * Utilize a função delay_ms para fazer o led piscar na frequência
@@ -130,6 +161,8 @@ int main (void)
             //delay_ms();
 			
 			//LED's dançando
+			
+			/* 
 			
 			for(int i = 0; i<4;i++){
 			
@@ -159,6 +192,7 @@ int main (void)
 				PIOC->PIO_CODR = (1 << PIN_LED_RED );
 				delay_ms(TEMPO*2);
 			}
+			*/
 	
 	}
 }
