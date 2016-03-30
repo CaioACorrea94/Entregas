@@ -110,7 +110,8 @@ int main (void)
 
 	
 	//31.5.6: Pull up enable
-	PIOB->PIO_PUER = (1 << PIN_PUSHBUTTON_1);	
+	//PIOB->PIO_PUER = (1 << PIN_PUSHBUTTON_1);	
+	_pio_pull_up(PIOB, (1 << PIN_PUSHBUTTON_1), 1);
 	
 	//PIOB->PIO_IFDR = (1 << PIN_PUSHBUTTON_1);
 	PIOB->PIO_IFSCER = (1 << PIN_PUSHBUTTON_1);
