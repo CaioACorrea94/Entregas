@@ -8,7 +8,7 @@
 */
 
 #include <asf.h>
-
+#include "Driver/pmc_maua.h"
 /*
  * Prototypes
  */
@@ -79,8 +79,10 @@ int main (void)
 	// 29.17.4 PMC Peripheral Clock Enable Register 0
 	// 1: Enables the corresponding peripheral clock.
 	// ID_PIOA = 11 - TAB 11-1
-	PMC->PMC_PCER0 |=  (1 << ID_PIOA) | (1 << ID_PIOB) | (1 << ID_PIOC); 
-
+	_pmc_enable_clock_periferico(ID_PIOA);
+	_pmc_enable_clock_periferico(ID_PIOB);
+	_pmc_enable_clock_periferico(ID_PIOC);
+	
 	// 31.6.46 PIO Write Protection Mode Register
 	// 0: Disables the write protection if WPKEY corresponds to 0x50494F (PIO in ASCII).
 	PIOA->PIO_WPMR = 0;
@@ -144,10 +146,12 @@ int main (void)
 			
 			if ( ((PIOB->PIO_PDSR >> PIN_PUSHBUTTON_1) & 1)  == 0){
 				PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
+				PIOC->PIO_SODR = (1 << PIN_LED_RED );
 				delay_ms(200);
 			}
 			else {
 				PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
+				PIOC->PIO_CODR = (1 << PIN_LED_RED );
 				delay_ms(200);
 				
 			} 
