@@ -91,21 +91,24 @@ int main (void)
 	_pmc_enable_clock_periferico(ID_PIOB);
 	_pmc_enable_clock_periferico(ID_PIOC);
 	
+	_pio_set_output(PIOC, (1 << PIN_LED_RED),1,0);
+	
 	// 31.6.46 PIO Write Protection Mode Register
 	// 0: Disables the write protection if WPKEY corresponds to 0x50494F (PIO in ASCII).
 	PIOA->PIO_WPMR = 0;
-	PIOC->PIO_WPMR = 0;
+//	PIOC->PIO_WPMR = 0;
 	PIOB->PIO_WPMR = 0;
 
 	 //31.6.1 PIO Enable Register
 	// 1: Enables the PIO to control the corresponding pin (disables peripheral control of the pin).	
 	PIOA->PIO_PER = (1 << PIN_LED_BLUE );
 	PIOA->PIO_PER = (1 << PIN_LED_GREEN );
-	PIOC->PIO_PER = (1 << PIN_LED_RED );
+//	PIOC->PIO_PER = (1 << PIN_LED_RED );
 	PIOB->PIO_PER = (1 << PIN_PUSHBUTTON_1);
 
 	
 	// 31.5.6: PIO disable buffer
+	// Enables the input on the I/O line.
 	PIOB->PIO_ODR = (1 << PIN_PUSHBUTTON_1);
 
 	
@@ -121,7 +124,7 @@ int main (void)
 	// 1: Enables the output on the I/O line.
 	PIOA->PIO_OER =  (1 << PIN_LED_BLUE );
 	PIOA->PIO_OER =  (1 << PIN_LED_GREEN );
-	PIOC->PIO_OER =  (1 << PIN_LED_RED );
+//	PIOC->PIO_OER =  (1 << PIN_LED_RED );
 
 	// 31.6.10 PIO Set Output Data Register
 	// 1: Sets the data to be driven on the I/O line.

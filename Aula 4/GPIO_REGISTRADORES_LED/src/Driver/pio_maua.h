@@ -34,20 +34,24 @@
  */
 
 /*  Default pin configuration (no attribute). */
-#define PIO_DEFAULT             (0u << 0)
+#define PIO_DEFAULT             (0 << 0)
 
 /*  The internal pin pull-up is active. */
-#define PIO_PULLUP              (1u << 0)
+#define PIO_PULLUP              (1 << 0)
 
 /*  The internal glitch filter is active. */
-#define PIO_DEGLITCH            (1u << 1)
+#define PIO_DEGLITCH            (1 << 1)
 
 /*  The pin is open-drain. */
-#define PIO_OPENDRAIN           (1u << 2)
+#define PIO_OPENDRAIN           (1 << 2)
 
 /*  The internal debouncing filter is active. */
-#define PIO_DEBOUNCE            (1u << 3)
+#define PIO_DEBOUNCE            (1 << 3)
 
+
+//_pio_set_input(PIOA, 1 << 3, PIO_DEBOUNCE | PIO_PULLUP);
+
+//if()
 
 /***************** 
  * PROTOTYPES 
