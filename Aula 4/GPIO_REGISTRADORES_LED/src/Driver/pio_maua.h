@@ -11,6 +11,16 @@
 /*****************
  * Includes
  *****************/
+/**
+ * @brief STDINT possui as definições dos tipos de variáveis
+ * e constantes
+ */
+#include <stdint.h>
+
+/**
+ * @brief Inclui as definições prévias do uc em uso
+ */
+#include <sam4sd32c.h>
 
 
 /***************** 

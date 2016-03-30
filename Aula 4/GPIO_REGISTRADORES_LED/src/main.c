@@ -9,6 +9,8 @@
 
 #include <asf.h>
 #include "Driver/pmc_maua.h"
+#include "Driver/pio_maua.h"
+
 /*
  * Prototypes
  */
@@ -39,6 +41,8 @@
 #define PIN_LED_RED 20
 
 #define PIN_PUSHBUTTON_1 3
+
+#define MASK_LED_BLUE (1 << PIN_LED_BLUE)
 
 /** 
  * Definição dos ports
@@ -145,15 +149,14 @@ int main (void)
 			/* WHile para verificar se o botão USRPB1 foi pressionado */
 			
 			if ( ((PIOB->PIO_PDSR >> PIN_PUSHBUTTON_1) & 1)  == 0){
-				PIOA->PIO_CODR = (1 << PIN_LED_BLUE );
-				PIOC->PIO_SODR = (1 << PIN_LED_RED );
+				_pio_clear(PIOA, MASK_LED_BLUE);
+				_pio_set(PIOC, 1 << PIN_LED_RED );			
 				delay_ms(200);
 			}
 			else {
-				PIOA->PIO_SODR = (1 << PIN_LED_BLUE );
-				PIOC->PIO_CODR = (1 << PIN_LED_RED );
+				_pio_set(PIOA, MASK_LED_BLUE);
+				_pio_clear(PIOC,1 << PIN_LED_RED);
 				delay_ms(200);
-				
 			} 
 						
 			

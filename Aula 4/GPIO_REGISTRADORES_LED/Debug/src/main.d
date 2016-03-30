@@ -122,7 +122,8 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/ASF/common/services/ioport/sam/ioport_pio.h \
  ../src/ASF/sam/drivers/pmc/sleep.h ../src/ASF/sam/boards/sam4s_ek2/led.h \
  ../src/ASF/sam/drivers/pio/pio_handler.h ../src/Driver/pmc_maua.h \
- ../src/ASF/sam/utils/cmsis/sam4s/include/sam4sd32c.h
+ ../src/ASF/sam/utils/cmsis/sam4s/include/sam4sd32c.h \
+ ../src/Driver/pio_maua.h
 
 ../src/asf.h:
 
@@ -381,3 +382,5 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\arm\arm-gnu-toolchain\arm-no
 ../src/Driver/pmc_maua.h:
 
 ../src/ASF/sam/utils/cmsis/sam4s/include/sam4sd32c.h:
+
+../src/Driver/pio_maua.h:
