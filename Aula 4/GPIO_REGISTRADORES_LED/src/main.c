@@ -44,6 +44,10 @@
 
 #define MASK_LED_BLUE (1 << PIN_LED_BLUE)
 
+#define BOTAO_1_APERTADO 0
+#define BOTAO_1_ABERTO 1
+
+
 /** 
  * Definição dos ports
  * Ports referentes a cada pino
@@ -148,7 +152,8 @@ int main (void)
 			
 			/* WHile para verificar se o botão USRPB1 foi pressionado */
 			
-			if ( ((PIOB->PIO_PDSR >> PIN_PUSHBUTTON_1) & 1)  == 0){
+	//		if ( ((PIOB->PIO_PDSR >> PIN_PUSHBUTTON_1) & 1)  == 0){
+			if (_pio_get_output_data_status(PIOB,1 << PIN_PUSHBUTTON_1 ) == BOTAO_1_APERTADO){
 				_pio_clear(PIOA, MASK_LED_BLUE);
 				_pio_set(PIOC, 1 << PIN_LED_RED );			
 				delay_ms(200);
